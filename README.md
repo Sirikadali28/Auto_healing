@@ -59,7 +59,24 @@ The Lambda function validates:
 If non-compliance is detected, the system automatically remediates the affected resource configuration.
 
 
+# Remediation Engine
 
+The auto-remediation engine automatically revokes unrestricted inbound access (`0.0.0.0/0` and `::/0`) to enforce security group compliance.
+
+```python
+if ip_range.get('CidrIp') == '0.0.0.0/0':
+    ec2.revoke_security_group_ingress(
+        GroupId=group_id,
+        IpPermissions=[permission]
+    )
+    print("Removed IPv4 open rule")
+
+if ipv6_range.get('CidrIpv6') == '::/0':
+    ec2.revoke_security_group_ingress(
+        GroupId=group_id,
+        IpPermissions=[permission]
+    )
+    print("Removed IPv6 open rule")
 ## Future Enhancements
 
 - Terraform integration
